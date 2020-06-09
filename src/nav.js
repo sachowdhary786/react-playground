@@ -1,62 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
+import PrivateRoute from './privateRoute';
 import {
     BrowserRouter as Router,
-    Switch,
     Route,
     Link
 } from "react-router-dom";
+import { authContext } from './context/auth';
 import Home from './home';
 import Profile from './profile';
+import Login from './pages/login';
+import Signup from './pages/signup';
 import Transfers from './transfers';
-import Spinner from './spinner';
 
-export default function Navi() {
+export default function Navi(props) {
+    const existingToken = JSON.parse(localStorage.getItem("tokens"));
+    const [authTokens, setAuthTokens] = useState(existingToken);
+
+    const setTokens = (data) => {
+        localStorage.setItem("tokens", JSON.stringify(data));
+        setAuthTokens(data);
+    }
     return (
-        <Router>
-            <div>
-                < Navbar bg="light" expand="lg" sticky="top">
-                    <Navbar.Brand to="/">REACT - Football App</Navbar.Brand>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="mr-auto">
-                            <Link to="/">Home</Link>
-                            <Link to="Profile">Profile</Link>
-                            <Link to="Transfers">Transfers</Link>
-                            <Link to="Spinner">Spinner</Link>
-                        </Nav>
-                    </Navbar.Collapse>
-                </ Navbar>
-                <Switch>
-                    <Route path="/profile">
-                        <User />
-                    </Route>
-                    <Route path="/transfers">
-                        <Players />
-                    </Route>
-                    <Route path="/spinner">
-                        <Game />
-                    </Route>
-                    <Route path="/">
-                        <Index />
-                    </Route>
-                </Switch>
-            </div>
-        </Router>
+        <authContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
+            <Router>
+                <div>
+                    < Navbar bg="light" expand="lg" sticky="top">
+                        <Navbar.Brand to="/">REACT - Football App</Navbar.Brand>
+                        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                        <Navbar.Collapse id="basic-navbar-nav">
+                            <Nav className="mr-auto">
+                                <Link to="/">Home</Link>
+                                <Link to="/Profile">Profile</Link>
+                                <Link to="/Transfers">Transfers</Link>
+                            </Nav>
+                        </Navbar.Collapse>
+                    </ Navbar>
+                    <Route exact path="/" component={Home} />
+                    <Route exact path="/login" component={Login} />
+                    <Route exact path="/signup" component={Signup} />
+                    <PrivateRoute exact path="/profile" component={Profile} />
+                    <Route exact path="/transfers" component={Transfers} />
+                </div>
+            </Router>
+        </authContext.Provider>
     )
 }
-
-function Index() {
-    return <Home />
-}
-function User() {
-    return <Profile />
-}
-function Players() {
-    return <Transfers/>
-}
-function Game(){
-    return <Spinner />
-}
-
