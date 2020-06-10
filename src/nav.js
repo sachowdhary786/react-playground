@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
+import Button from 'react-bootstrap/Button';
 import PrivateRoute from './privateRoute';
 import {
     BrowserRouter as Router,
@@ -27,13 +28,19 @@ export default function Navi(props) {
             <Router>
                 <div>
                     < Navbar bg="light" expand="lg" sticky="top">
-                        <Navbar.Brand to="/">REACT - Football App</Navbar.Brand>
+                        <Navbar.Brand to="/">Project 7</Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="mr-auto">
-                                <Link to="/">Home</Link>
-                                <Link to="/Profile">Profile</Link>
-                                <Link to="/Transfers">Transfers</Link>
+                                <Link to="/">
+                                    <Button variant="standard">Home</Button>
+                                </Link>
+                                <Link to="/Profile">
+                                    <Button variant="standard">Profile
+                                </Button></Link>
+                                <Link to="/Transfers">
+                                <Button variant="standard">Transfers</Button>
+                                </Link>
                             </Nav>
                         </Navbar.Collapse>
                     </ Navbar>
